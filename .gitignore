@@ -1,0 +1,8 @@
+*.json
+*.env
+*.yaml
+.idea/
+/logs/
+/dags/__pycache__/
+/plugins/__pycache__/
+/db/

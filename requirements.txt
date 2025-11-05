@@ -1,0 +1,17 @@
+# core for your extractor
+
+google-ads==28.3.0
+google-cloud-bigquery==3.38.0
+pandas==2.2.3
+pyarrow==21.0.0
+python-dotenv==1.2.1
+
+# optional but recommended (silences that future warning and future-proofs loads)
+
+pandas-gbq==0.30.0
+
+# bring these back ONLY if you truly need them for other DAGs
+# mysql-connector-python==8.0.29    # only if you connect to MySQL
+# pycountry==24.6.1               # only if used
+# openpyxl==3.1.2                   # only if writing/reading Excel files
+# grpcio-status==1.76.0             # only if you explicitly rely on this pin
