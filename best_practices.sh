@@ -27,7 +27,7 @@
 # ⚠️ When NOT to Use:
 #    If you’re already in the correct directory.
 # ==================================================================================================
-cd "C:/Users/prasa/Root/Airflow-Docker-Prod"
+cd "C:/Users/prasa/Root/Airflow-Docker-Dev"
 
 # ==================================================================================================
 # 🧩 Step 2 — Initialize the Airflow Metadata Database
