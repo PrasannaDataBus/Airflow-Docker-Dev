@@ -18,7 +18,7 @@
 # ==================================================================================================
 
 # ==================================================================================================
-# 🧭 Step 1 — Navigate to Your Airflow Folder
+# 🧭 Navigate to Your Airflow Folder
 # --------------------------------------------------------------------------------------------------
 # ✅ What It Does:
 #    Moves you into your Airflow Docker project directory.
@@ -30,7 +30,7 @@
 cd "C:/Users/prasa/Root/Airflow-Docker-Dev"
 
 # ==================================================================================================
-# 🧩 Step 2 — Initialize the Airflow Metadata Database
+# 🧩 Initialize the Airflow Metadata Database
 # --------------------------------------------------------------------------------------------------
 # ✅ When to Use:
 #   - First-time setup (new environment)
@@ -47,7 +47,7 @@ cd "C:/Users/prasa/Root/Airflow-Docker-Dev"
 docker compose run --rm airflow-init
 
 # ==================================================================================================
-# 🟢 Step 3 — Start Airflow Containers
+# 🟢 Start Airflow Containers
 # --------------------------------------------------------------------------------------------------
 # Option A — Background Mode (Recommended)
 # ✅ When to Use:
@@ -72,10 +72,10 @@ docker compose up -d
 # ⚠️ When NOT to Use:
 #   - In production or long-running sessions (stops when terminal closes)
 # --------------------------------------------------------------------------------------------------
-# docker compose up
+docker compose up
 
 # ==================================================================================================
-# 🛑 Step 4 — Stop Airflow Containers
+# 🛑 Stop Airflow Containers
 # --------------------------------------------------------------------------------------------------
 # ✅ When to Use:
 #   - To stop Airflow cleanly and preserve all data/logs
@@ -87,17 +87,17 @@ docker compose up -d
 docker compose down
 
 # ==================================================================================================
-# 💣 Step 5 — Full Environment Reset (Deletes Database)
+# 💣 Full Environment Reset (Deletes Database)
 # --------------------------------------------------------------------------------------------------
 # ✅ When to Use:
 #   - To completely wipe and reinitialize Airflow (clean start)
 # ⚠️ When NOT to Use:
 #   - If you want to preserve metadata, DAG runs, or user accounts
 # ==================================================================================================
-# docker compose down -v
+docker compose down -v
 
 # ==================================================================================================
-# 🔁 Step 6 — Restart or Rebuild Airflow
+# 🔁 Restart or Rebuild Airflow
 # --------------------------------------------------------------------------------------------------
 # Restart Cleanly
 # ✅ Use when restarting after small edits to environment variables or compose file.
@@ -108,11 +108,11 @@ docker compose down
 # Rebuild Images (after Dockerfile or dependency changes)
 # ✅ Use when adding new Python dependencies or modifying Dockerfile.
 # ==================================================================================================
-# docker compose build --no-cache
-# docker compose up -d
+docker compose build --no-cache
+docker compose up -d
 
 # ==================================================================================================
-# 👤 Step 7 — Create an Admin User
+# 👤 Create an Admin User
 # --------------------------------------------------------------------------------------------------
 # ✅ When to Use:
 #   - After DB initialization (first-time setup or reset)
@@ -134,7 +134,7 @@ docker exec -it airflow-webserver-prod airflow users create \
   --password "your_secure_password"
 
 # ==================================================================================================
-# 🌐 Step 8 — Access the Airflow Web UI
+# 🌐 Access the Airflow Web UI
 # --------------------------------------------------------------------------------------------------
 # Dev UI:  http://localhost:8080
 # Prod UI: http://localhost:8081
@@ -142,7 +142,7 @@ docker exec -it airflow-webserver-prod airflow users create \
 # ==================================================================================================
 
 # ==================================================================================================
-# 🧹 Step 9 — Maintenance & Inspection
+# 🧹 Maintenance & Inspection
 # --------------------------------------------------------------------------------------------------
 # Task                     | Command                                              | Description
 # --------------------------|------------------------------------------------------|-----------------------------
@@ -154,7 +154,7 @@ docker exec -it airflow-webserver-prod airflow users create \
 # ==================================================================================================
 
 # ==================================================================================================
-# 🧩 Step 10 — Environment Configuration (Dev vs Prod)
+# 🧩 Environment Configuration (Dev vs Prod)
 # --------------------------------------------------------------------------------------------------
 # Setting         | Dev                             | Prod                              | Notes
 # ----------------|----------------------------------|-----------------------------------|----------------------------------------
@@ -165,7 +165,7 @@ docker exec -it airflow-webserver-prod airflow users create \
 # ==================================================================================================
 
 # ==================================================================================================
-# 🧠 Step 11 — Common Issues & Fixes
+# 🧠 Common Issues & Fixes
 # --------------------------------------------------------------------------------------------------
 # Error                                 | Cause                        | Solution
 # --------------------------------------|-------------------------------|-----------------------------------------
@@ -177,10 +177,10 @@ docker exec -it airflow-webserver-prod airflow users create \
 # ==================================================================================================
 
 # ==================================================================================================
-# 🧩 Step 12 — Typical Full Workflow
+# 🧩 Typical Full Workflow
 # --------------------------------------------------------------------------------------------------
 # 1️⃣ Move to Airflow folder
-cd "C:/Users/prasa/Root/Airflow-Docker-Prod"
+cd "C:/Users/prasa/Root/Airflow-Docker-dev"
 
 # 2️⃣ Initialize Airflow DB (only once)
 docker compose run --rm airflow-init
@@ -203,7 +203,51 @@ docker compose down
 # ==================================================================================================
 
 # ==================================================================================================
-# 🧩 Step 13 — Quick Reference Cheat Sheet
+# 🟡 Apply Dependency Changes (New Libraries)
+# --------------------------------------------------------------------------------------------------
+# Option B — Rebuild Images
+# ✅ When to Use:
+#   - You added a new library to 'requirements.txt' (e.g., google-ads, facebook_business).
+#   - You changed the 'Dockerfile'.
+#
+# 🧠 What It Does:
+#   - Recompiles the Docker image with new Python libraries.
+#   - Recreates containers using the new image.
+# ==================================================================================================
+docker compose up -d --build
+
+# ==================================================================================================
+# 🔴  The "Nuclear" Reset (Troubleshooting)
+# --------------------------------------------------------------------------------------------------
+# Option C — Wipe & Restart
+# ✅ When to Use:
+#   - You changed DB credentials (passwords/users) in .env.
+#   - You switched Executors (e.g., SQLite to Postgres).
+#   - You see "Database is locked" or strange schema errors.
+#   - You want to clear all past DAG run history and start fresh.
+#
+# ⚠️ WARNING: This deletes all historical DAG run data in the database!
+# ==================================================================================================
+docker compose down --volumes --remove-orphans
+docker compose up -d --build
+
+# ==================================================================================================
+# 🔵 Debugging "Infinite Restarts" or "Exited" Containers
+# --------------------------------------------------------------------------------------------------
+# If a container (like the scheduler) keeps restarting or exits immediately:
+# 1. Check the logs to see the Python error:
+#    > docker logs airflow-scheduler-dev
+#    or
+#    > docker logs airflow-webserver-dev
+#
+# 2. Common Causes & Fixes:
+#    - "Network is unreachable" -> You have top-level code in a DAG. Move client init inside functions.
+#    - "Database is locked" -> You are using SQLite with Parallelism. Ensure .env points to Postgres.
+#    - "OOM / SIGKILL" -> Docker ran out of RAM. Increase Docker Desktop memory to 4GB+.
+# ==================================================================================================
+
+# ==================================================================================================
+# 🧩 Quick Reference Cheat Sheet
 # --------------------------------------------------------------------------------------------------
 # Purpose               | Command                                                  | Detached? | Notes
 # ----------------------|----------------------------------------------------------|-----------|----------------------------
@@ -233,4 +277,53 @@ docker compose down
 #     logs/
 #     secrets/
 # ⚠️ Avoid `docker compose down -v` unless you truly want a blank Airflow instance.
+# ==================================================================================================
+
+# ==================================================================================================
+# FERNET KEY Related
+# --------------------------------------------------------------------------------------------------
+
+# To Generate AIRFLOW_FERNET_KEY follow the below steps:
+
+# The below will install python if python was not found as Docker image
+
+docker run --rm python:3.10 python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+
+# The above will install cyrtopgraphy if not installed previously and generates AIRFLOW_FERNET_KEY
+
+docker run --rm python:3.10 sh -c "pip install cryptography >/dev/null 2>&1 && python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'"
+
+# Note: If your loval venv uses 3.9 but you have installed python 3.10 image in docker - I would suggest to keep both local and docker image using the same version
+# Follow the below steps to remove the previously installed version 3.10 and install 3.9.
+
+docker rmi python:3.10
+
+# After removing 3.10 you can verify with:
+
+docker images
+
+# Now you will need to install Python 3.9 image - the below code will install python 3.9 if not found and it will generate AIRFLOW_FERNET_KEY
+
+docker run --rm python:3.9 sh -c "pip install cryptography >/dev/null 2>&1 && python - << 'EOF'
+from cryptography.fernet import Fernet
+print(Fernet.generate_key().decode())
+EOF"
+
+# If you are confident that python and cyrptography has already been installed then use the below code
+# The below can also be used to re-generate AIRFLOW_FERNET_KEY
+
+py -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+
+# ==================================================================================================
+
+# ==================================================================================================
+# Stop and Destroy Volumes:
+# --------------------------------------------------------------------------------------------------
+
+docker compose down --volumes --remove-orphans
+
+# Start Fresh:
+
+docker compose up -d --build
+
 # ==================================================================================================
