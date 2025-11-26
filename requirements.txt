@@ -10,6 +10,9 @@ python-dotenv==1.2.1
 
 pandas-gbq==0.30.0
 
+# Meta Marketing API SDK
+facebook_business==24.0.0
+
 # bring these back ONLY if you truly need them for other DAGs
 # mysql-connector-python==8.0.29    # only if you connect to MySQL
 # pycountry==24.6.1               # only if used
