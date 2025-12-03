@@ -1,6 +1,7 @@
 *.json
 *.env
 *.yaml
+*.yml
 .idea/
 /logs/
 /dags/__pycache__/
