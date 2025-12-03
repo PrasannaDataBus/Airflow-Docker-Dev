@@ -18,3 +18,7 @@ facebook_business==24.0.0
 # pycountry==24.6.1               # only if used
 # openpyxl==3.1.2                   # only if writing/reading Excel files
 # grpcio-status==1.76.0             # only if you explicitly rely on this pin
+
+# For DBT
+
+dbt-bigquery==1.7.8
