@@ -23,11 +23,11 @@ default_args = {
 with DAG(
     'ads_performance_dag',
     default_args=default_args,
-    description='Orchestrates Ads Performance dbt Silver and Gold transformations (Dev)',
+    description='Orchestrates Ads Performance (Ads + CRM) dbt Silver and Gold transformations (Dev)',
     schedule_interval=None, # <--- Manual Trigger Only for Dev
     start_date=datetime(2025, 1, 1),
     catchup=False,
-    tags=['dbt', 'transformation', 'dev'],
+    tags=['dbt', 'transformation', 'dev', 'roi', 'roas', 'performance'],
 ) as dag:
 
     # 1. Check Connection
