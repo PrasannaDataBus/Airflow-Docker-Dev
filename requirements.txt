@@ -22,3 +22,7 @@ facebook_business==24.0.0
 # For DBT
 
 dbt-bigquery==1.7.8
+
+# Database Connectors (Required for CRM Extraction)
+mysql-connector-python==8.0.29
+SQLAlchemy==1.4.52
