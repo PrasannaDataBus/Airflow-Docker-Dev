@@ -3,7 +3,7 @@
 google-ads==34.0.0
 google-api-core>=2.19.1
 googleapis-common-protos>=1.60.0
-apache-airflow-providers-google
+apache-airflow-providers-google==10.21.0
 google-cloud-bigquery==3.38.0
 pandas==2.2.3
 pyarrow==21.0.0
