@@ -1,6 +1,6 @@
 # core for your extractor
 
-google-ads==28.3.0
+google-ads==34.0.0
 google-cloud-bigquery==3.38.0
 pandas==2.2.3
 pyarrow==21.0.0
